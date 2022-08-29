@@ -1,0 +1,32 @@
+{
+  "name": "react-boilerplate",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "cleanup": "rm -rf node_modules"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@npm-registry/eapteka-ui": "^1.0.0",
+    "babel-loader": "^8.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss-loader": "^7.0.1",
+    "sass": "^1.54.0",
+    "sass-loader": "^13.0.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.1"
+  }
+}
