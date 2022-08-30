@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "effector": "^22.3.0",
+    "effector-inspector": "^0.9.1",
     "effector-localstorage": "^0.5.3",
     "effector-logger": "^0.13.4",
     "effector-react": "^22.1.6",

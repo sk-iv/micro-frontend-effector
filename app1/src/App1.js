@@ -22,7 +22,7 @@ export const App1 = () => {
   const handleDeleteTask = (e) => {
     deleteTask(e.target.value)
   }
-console.log('status', status);
+
   if (status === 'pending') return '... ждёмс 2 сек'
 
   if (!isChecked) return '🙈 Фича недоступна'

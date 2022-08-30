@@ -1,4 +1,4 @@
-import {createStore, combine, createEvent, guard, createEffect} from 'effector-logger'
+import {createStore, combine, createEvent, sample, createEffect} from 'effector-logger'
 import { status } from 'patronum';
 import getFetch from './getFetch'
 import $isChecked from 'host/model2';
@@ -45,12 +45,23 @@ $error.on(fetchFx.fail, (_, value) => value.error)
 // Связи
 // ________________
 
-guard({
-  clock: [$isChecked, init],
-  filter: () =>  {
-    return $isChecked.getState() && $requestStatus.getState() === 'initial'
+/**
+ * 1. Если срабатывает событие или обновляется стор
+ * 2. Взять значения из сторов
+ * 3. Проверить значения на соответствие нужным условиям
+ * 4. Если в шаге 3 - `true` запустить юнит
+*/
+
+sample({
+  clock: [$isChecked, init],                 /*1*/
+  source: {                                  /*2*/
+    isChecked: $isChecked,
+    requestStatus: $requestStatus
   },
-  target: fetchFx,
+  filter: ({isChecked, requestStatus}) =>  { /*3*/
+    return isChecked && requestStatus === 'initial'
+  },
+  target: fetchFx,                           /*4*/
 })
 
 export default $store

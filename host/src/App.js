@@ -2,7 +2,6 @@ import React from "react";
 import ErrorBoundary from "./ErrorBoundary";
 const RemoteApp1 = React.lazy(() => import("App1/App1"));
 const RemoteApp2 = React.lazy(() => import("App2/App2"));
-// const FeatureFromApp2 = React.lazy(() => import("App2/FeatureFromApp2"));
 import { configureRootTheme, externalTheme } from '@npm-registry/eapteka-ui';
 import './index.css'
 
