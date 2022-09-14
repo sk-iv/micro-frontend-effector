@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "parserOptions": {
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false, // <== ADD THIS
+    "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
+    "sourceType": "module" // Allows for the use of imports
+  },
+  "plugins": ["effector"],
+  "extends": ["plugin:effector/recommended", "plugin:effector/scope", "plugin:effector/react", "plugin:effector/future"]
+}

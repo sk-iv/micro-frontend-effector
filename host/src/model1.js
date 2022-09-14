@@ -1,4 +1,4 @@
-import {createStore, combine, createEvent, sample, createEffect} from 'effector-logger'
+import {createStore, combine, createEvent, sample, createEffect} from 'effector'
 import { status } from 'patronum';
 import getFetch from './getFetch'
 import $isChecked from 'host/model2';
@@ -6,18 +6,18 @@ import $isChecked from 'host/model2';
 // Определения узлов
 // ________________
 
-export const init = createEvent('init')
-export const addTask = createEvent('addTask')
-export const deleteTask = createEvent('deleteTask')
-export const setDoneTask = createEvent('setDone')
+export const init = createEvent()
+export const addTask = createEvent()
+export const deleteTask = createEvent()
+export const setDoneTask = createEvent()
 
 const fetchFx = createEffect('fetchFx')
 fetchFx.use(getFetch)
 
-const $cache = createStore(null, {name: '$cache'})
-const $entries = createStore([], {name: '$entries'})
+const $cache = createStore(null)
+const $entries = createStore([])
 const $requestStatus = status({ effect: fetchFx })
-const $error = createStore(null, {name: '$error'})
+const $error = createStore(null)
 const $store = combine(
   $entries,
   $cache,

@@ -1,0 +1,6 @@
+{
+  "root": true,
+  "parser": "@babel/eslint-parser",
+  "plugins": ["effector"],
+  "extends": ["plugin:effector/recommended", "plugin:effector/scope", "plugin:effector/react", "plugin:effector/future"]
+}
