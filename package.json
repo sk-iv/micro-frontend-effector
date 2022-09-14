@@ -8,6 +8,10 @@
       "app2"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sk-iv/micro-frontend-effector"
+  },
   "scripts": {
     "start": "npm-run-all --parallel start:host start:app1 start:app2",
     "start:host": "npm run start -w ./host",
