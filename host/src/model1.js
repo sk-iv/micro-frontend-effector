@@ -1,6 +1,6 @@
 import {createStore, combine, createEvent, sample, createEffect} from 'effector'
 import { status } from 'patronum';
-import getFetch from './getFetch'
+import fetchApi, { normalize } from './getFetch'
 import $isChecked from 'host/model2';
 
 // Определения узлов
@@ -11,8 +11,8 @@ export const addTask = createEvent()
 export const deleteTask = createEvent()
 export const setDoneTask = createEvent()
 
-const fetchFx = createEffect('fetchFx')
-fetchFx.use(getFetch)
+const fetchFx = createEffect()
+fetchFx.use(fetchApi)
 
 const $cache = createStore(null)
 const $entries = createStore([])
@@ -29,12 +29,12 @@ const $store = combine(
 // ________________
 
 $entries
-  .on(fetchFx.done, (_, value) => Object.keys(value.result))
+  .on(fetchFx.done, (_, value) => normalize(value.result).entries)
   .on(deleteTask, (store, value) => store.filter((item) => item !== value))
-  .on(addTask, (store) => ([`id${Object.keys($cache.getState()).length + 1}`, ...store]))
+  // .on(addTask, (store) => ([`id${Object.keys($cache.getState()).length + 1}`, ...store]))
 
 $cache
-  .on(fetchFx.done, (_, value) => value.result)
+  .on(fetchFx.done, (_, value) => normalize(value.result).cache)
   .on(setDoneTask, (store, name) => {
     return {...store, [name]: {...store[name], done: !store[name].done}}
   })
@@ -61,19 +61,20 @@ sample({
   filter: ({isChecked, requestStatus}) =>  { /*3*/
     return isChecked && requestStatus === 'initial'
   },
+  fn: (_, initValue) => initValue,
   target: fetchFx,                           /*4*/
 })
 
-// sample({
-//   clock: addTask,
-//   source: {
-//     entries: $entries,
-//     cache: $cache
-//   },
-//   fn:  ({ entries, cache }) => {
-//     return ([`id${Object.keys(cache).length + 1}`, ...entries])
-//   },
-//   target: $entries,
-// })
+sample({
+  clock: addTask,
+  source: {
+    entries: $entries,
+    cache: $cache
+  },
+  fn: ({ entries, cache }) => {
+    return ([`id${Object.keys(cache).length + 1}`, ...entries])
+  },
+  target: $entries,
+})
 
 export default $store

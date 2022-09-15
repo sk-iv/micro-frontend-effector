@@ -8,10 +8,10 @@ import './index.css'
 
 export const App1 = () => {
   useEffect(() => {
-    init()
+    init(decodeURI(window.location.search))
   }, [])
   const isChecked = useStore($isChecked);
-  const [entries, cache, status] = useStore($store);
+  const [entries, cache, status, error] = useStore($store);
 
   const handleAddTask = (e) => {
     addTask(e.target.value)
@@ -27,38 +27,42 @@ export const App1 = () => {
 
   if (!isChecked) return '🙈 Фича недоступна'
 
+  if (status === 'fail') return `❌ ${error.message}`
+
   if (entries.length === 0) return null
 
-  return (<div className="width-md">
-    <FieldTask addTask={handleAddTask} />
-    <List>
-      {entries.map((id)=> {
-        return (
-        <ListItem
-          key={id}
-          style={{textDecoration: cache[id].done ? 'line-through' : 'none'}}
-          clickableProps={{ tag: 'label' }}
-          addonAfter={<>
-            <Checkbox
-              name={id}
-              onChange={handleSetDoneTask}
-              checked={cache[id].done}
-            />
-            <Button
-              size="s"
-              value={id}
-              theme="transparent"
-              onClick={handleDeleteTask}
-            >
-              <Icon name="minus" size="m" />
-            </Button>
-          </>}
-        >
-          {cache[id].label}
-        </ListItem>
-        )
-      })}
-    </List>
-  </div>);
+  return (
+    <div className="width-md">
+      <FieldTask addTask={handleAddTask} />
+      <List>
+        {entries.map((id)=> {
+          return (
+          <ListItem
+            key={id}
+            style={{textDecoration: cache[id].done ? 'line-through' : 'none'}}
+            clickableProps={{ tag: 'label' }}
+            addonAfter={<>
+              <Checkbox
+                name={id}
+                onChange={handleSetDoneTask}
+                checked={cache[id].done}
+              />
+              <Button
+                size="s"
+                value={id}
+                theme="transparent"
+                onClick={handleDeleteTask}
+              >
+                <Icon name="minus" size="m" />
+              </Button>
+            </>}
+          >
+            {cache[id].label}
+          </ListItem>
+          )
+        })}
+      </List>
+    </div>
+  );
 };
 export default App1;

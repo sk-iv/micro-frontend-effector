@@ -40,7 +40,7 @@ sample({
 
 [📚 Normalize your complex JS objects](https://dev.to/danielpdev/normalize-your-complex-js-objects-21d9)
 
-Сложность O(n):
+Сложность O(n) линейная:
 
 ```js
 const apiData = [
@@ -59,7 +59,7 @@ const apiData = [
 
 🢃
 
-Сложность O(1):
+Сложность O(1) константная:
 ```js
 {
   "1": {
