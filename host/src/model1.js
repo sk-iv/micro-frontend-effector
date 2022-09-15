@@ -64,4 +64,16 @@ sample({
   target: fetchFx,                           /*4*/
 })
 
+// sample({
+//   clock: addTask,
+//   source: {
+//     entries: $entries,
+//     cache: $cache
+//   },
+//   fn:  ({ entries, cache }) => {
+//     return ([`id${Object.keys(cache).length + 1}`, ...entries])
+//   },
+//   target: $entries,
+// })
+
 export default $store

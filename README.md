@@ -8,9 +8,15 @@ npm start
 ```
 Результат на http://localhost:3000/
 
-- [Примеры использования](https://github.com/effector/awesome#examples)
-- [Телеграм канал](https://t.me/effector_ru)
-- [Статья про тэстирование](https://dev.to/effector/the-best-part-of-effector-4c27)
+---
+## Материалы для обучения Effector
+
+- [📚 Структура моделей Effector](https://sova.dev/ru/effector-model-structure/)
+- [🔗 Примеры использования](https://github.com/effector/awesome#examples)
+- [💬 Телеграм канал](https://t.me/effector_ru)
+
+- [📚 Статья про тэстирование](https://dev.to/effector/the-best-part-of-effector-4c27)
+- [▶️ React and Effector From Beginners to Masters](https://www.youtube.com/watch?v=_m2XfYzBV2c)
 
 ---
 ## Соединение стора с другим стором
@@ -28,4 +34,48 @@ sample({
   fn: ({s1, s2}) =>     // Редьюсер
   target: $store2,      // Если в filter - `true` запустить юнит
 })
+```
+---
+## Нормализация данных
+
+[📚 Normalize your complex JS objects](https://dev.to/danielpdev/normalize-your-complex-js-objects-21d9)
+
+Сложность O(n):
+
+```js
+const apiData = [
+  {
+    id: 1,
+    name: "Svetlana Ivannikova",
+    login: "sk_iv"
+  },
+  {
+    id: 2,
+    name: "John Doe",
+    login: "jo_do"
+  }
+];
+```
+    ___
+   |   |
+ __!   !__
+ \       /
+  \     /
+   \   /
+    \ /
+     Y
+Сложность O(1):
+```js
+{
+  "1": {
+    "id": 1,
+    "name": "Svetlana Ivannikova",
+    "login": "sk_iv"
+  },
+  "2": {
+    "id": 2,
+    "name": "Other Name",
+    "siteUrl": "danielpdev.io"
+  }
+}
 ```
