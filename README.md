@@ -14,12 +14,13 @@ npm start
 - [📚 Структура моделей Effector](https://sova.dev/ru/effector-model-structure/)
 - [🔗 Примеры использования](https://github.com/effector/awesome#examples)
 - [💬 Телеграм канал](https://t.me/effector_ru)
-
+- [▶️ Делаем игру Ball Sort на Effector](https://www.youtube.com/watch?v=tjjxIQd0E8c) 🕑 1h 42m
+- [▶️ React and Effector From Beginners to Masters](https://www.youtube.com/watch?v=_m2XfYzBV2c) 🕑 17m
+---
 - [📚 Статья про тэстирование](https://dev.to/effector/the-best-part-of-effector-4c27)
-- [▶️ React and Effector From Beginners to Masters](https://www.youtube.com/watch?v=_m2XfYzBV2c)
 
 ---
-## Соединение стора с другим стором
+## Соединение юнитов
 
 Авторы рекомендуют привыкать к сэмплам для апдейта сторов, это гораздо более гибкая форма в плане источников данных и фильтрации
 
