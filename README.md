@@ -12,10 +12,12 @@ npm start
 ## Материалы для обучения Effector
 
 - [📚 Структура моделей Effector](https://sova.dev/ru/effector-model-structure/)
+- [Небольшой проект на эффекторе для самых маленьких](https://github.com/omgpiu/effector-article/blob/master/README_ru.md)
 - [🔗 Примеры использования](https://github.com/effector/awesome#examples)
 - [💬 Телеграм канал](https://t.me/effector_ru)
 - [▶️ Делаем игру Ball Sort на Effector](https://www.youtube.com/watch?v=tjjxIQd0E8c) 🕑 1h 42m
 - [▶️ React and Effector From Beginners to Masters](https://www.youtube.com/watch?v=_m2XfYzBV2c) 🕑 17m
+
 ---
 - [📚 Статья про тэстирование](https://dev.to/effector/the-best-part-of-effector-4c27)
 

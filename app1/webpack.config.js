@@ -50,7 +50,7 @@ module.exports = {
       name: "App1",
       filename: "moduleEntry.js",
       remotes: {
-        host: "host@http://localhost:3000/host.js"
+        host: "host@http://localhost:9090/host.js"
       },
       exposes: {
         "./App1": "./src/App1",

@@ -3,5 +3,7 @@
     "@babel/preset-env",
     "@babel/preset-react"
   ],
-  "plugins": ["effector-logger/babel-plugin"]
+  "plugins": [
+    "effector-logger/babel-plugin"
+  ]
 }

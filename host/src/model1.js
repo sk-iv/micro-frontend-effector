@@ -1,10 +1,13 @@
 import {createStore, combine, createEvent, sample, createEffect} from 'effector'
+import { createGate } from "effector-react"
 import { status } from 'patronum';
 import fetchApi, { normalize } from './getFetch'
 import $isChecked from 'host/model2';
 
 // Определения узлов
 // ________________
+
+export const TaskGate = createGate()
 
 export const init = createEvent()
 export const addTask = createEvent()
@@ -44,6 +47,11 @@ $error.on(fetchFx.fail, (_, value) => value.error)
 
 // Связи
 // ________________
+
+sample({
+  clock: TaskGate.open,
+  target: init
+})
 
 /**
  * 1. Если срабатывает событие или обновляется стор

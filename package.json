@@ -18,12 +18,18 @@
     "start:app1": "npm run start -w ./app1",
     "start:app2": "npm run start -w ./app2",
     "start:all": "npm workspaces run start",
-    "cleanup": "npm workspaces run cleanup"
+    "cleanup": "npm workspaces run cleanup",
+    "serve": "nodemon --exec babel-node --config-file ./.babelrc ./host/server/index.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.0",
+    "@babel/core": "^7.19.1",
     "@babel/eslint-parser": "^7.18.9",
-    "npm-run-all": "^4.1.5"
+    "@babel/node": "^7.19.1",
+    "@babel/polyfill": "^7.12.1",
+    "@module-federation/node": "^0.0.1",
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "@npm-registry/eapteka-ui": "^1.0.0",
@@ -34,6 +40,9 @@
     "effector-react": "^22.1.6",
     "eslint": "^8.10.0",
     "eslint-plugin-effector": "^0.8.1",
-    "patronum": "^1.11.0"
+    "express": "^4.18.1",
+    "patronum": "^1.11.0",
+    "react-helmet": "^6.1.0",
+    "regenerator-runtime": "^0.13.9"
   }
 }

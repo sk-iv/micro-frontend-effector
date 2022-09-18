@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
 import { Button, Icon, List, ListItem, Checkbox } from '@npm-registry/eapteka-ui';
-import { useStore } from 'effector-react';
-import $store, { init, deleteTask, addTask, setDoneTask } from 'host/model1';
+import { useStore, useGate } from 'effector-react';
+import $store, { init, deleteTask, addTask, setDoneTask, TaskGate } from 'host/model1';
 import $isChecked from 'host/model2';
 import FieldTask from './FieldTask'
+import { configureRootTheme, externalTheme } from '@npm-registry/eapteka-ui';
 import './index.css'
 
+configureRootTheme({ theme: externalTheme });
+
 export const App1 = () => {
-  useEffect(() => {
-    init(decodeURI(window.location.search))
-  }, [])
+  useGate(TaskGate, decodeURI(window.location.search))
+
   const isChecked = useStore($isChecked);
   const [entries, cache, status, error] = useStore($store);
 
