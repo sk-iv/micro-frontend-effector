@@ -4,6 +4,13 @@
     "@babel/preset-react"
   ],
   "plugins": [
-    "effector-logger/babel-plugin"
+    "effector-logger/babel-plugin",
+    "@babel/plugin-proposal-optional-chaining",
+    [
+      "effector/babel-plugin",
+      {
+        "factories": ["host/src/createForm"]
+      }
+    ]
   ]
 }

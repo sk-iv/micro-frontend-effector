@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Icon, List, ListItem, Checkbox } from '@npm-registry/eapteka-ui';
 import { useStore, useGate } from 'effector-react';
-import $store, { init, deleteTask, addTask, setDoneTask, TaskGate } from 'host/model1';
+import $store, { deleteTask, addTask, setDoneTask, TaskGate } from 'host/model1';
 import $isChecked from 'host/model2';
 import FieldTask from './FieldTask'
 import { configureRootTheme, externalTheme } from '@npm-registry/eapteka-ui';

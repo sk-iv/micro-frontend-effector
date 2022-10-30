@@ -9,6 +9,7 @@ module.exports = merge(shared, {
   target: "web",
   devServer: {
     port: 9090,
+    historyApiFallback: true,
   },
   entry: ["@babel/polyfill", path.resolve(__dirname, "../src/index.js")],
   mode: "development",

@@ -20,7 +20,7 @@ npm start
 
 ---
 - [📚 Статья про тэстирование](https://dev.to/effector/the-best-part-of-effector-4c27)
-
+- [📚 Необычное использование Fork API](https://sova.dev/ru/unusual-use-of-fork-api/)
 ---
 ## Соединение юнитов
 

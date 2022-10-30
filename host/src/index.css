@@ -17,3 +17,12 @@ body {
 .width-md {
   width: 240px;
 }
+
+.container-form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.mt-1 {
+ margin-top: 1rem;
+}
