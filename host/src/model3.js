@@ -20,6 +20,10 @@ export const useField = (name) => {
       name,
       value,
     })),
+    onCheck: form.changeField.prepend((id) => ({
+      name,
+      id,
+    })),
     onBlur:  form.blurField.prepend((value) => ({
       name,
       value,

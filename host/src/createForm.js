@@ -2,21 +2,24 @@ import { createStore, createEvent, sample } from 'effector'
 
 const fieldProps = {
   initialValue: '',
+  initialChecked: [],
   isValid: null,
+  /** Если `true` в списке можно выбрать более одного значения */
+  isMultiselectable: false,
   value: '',
-  checked: false,
-  /**Нужен для событий аналитики, если надо отправить событие при первом касании */
+  checked: [],
+  /** Нужен для событий аналитики, если надо отправить событие при первом касании */
   isTouched: false,
   label: '',
   name: '',
   // trigger: 'onInit',
-  options: [],
+  // options: [],
   type: 'text',
   errorMessage: '',
   /**
    * Если `true`, поле обязательно к заполнению
    */
-  required: false,
+  // required: false,
   requiredMessage: '',
   /**
    * Функция колбэк для валидации значения
@@ -52,12 +55,13 @@ export const createForm = ({ submitFx }) => {
 
   $fields
     .on(addField, (fields, field) => {
-      const errorMessage = field.validate(field.initialValue) || ''
+      const errorMessage = field?.validate?.(field.initialValue) || ''
       return ({
         ...fields,
         [field.name]: {
           ...fieldProps,
           ...field,
+          checked: field.initialChecked,
           value: field.initialValue,
           isValid: !Boolean(field.initialValue) ? null : !Boolean(errorMessage),
           errorMessage: !Boolean(field.initialValue) ? '' : errorMessage,
@@ -69,8 +73,11 @@ export const createForm = ({ submitFx }) => {
         ...fields,
         [diff.name]: {
           ...fields[diff.name],
+          checked: [diff.id],
           isTouched: true,
-          value: fields[diff.name]?.parse(diff.value) || !Boolean(diff.value)
+          value: fields[diff.name]?.parse?.(diff.value)
+            || !Boolean(fields[diff.name]?.parse)
+            || diff.value === ''
             ? diff.value
             : fields[diff.name].value
         },
@@ -78,14 +85,16 @@ export const createForm = ({ submitFx }) => {
     })
     .on(blurField, (fields, diff) => {
       if (fields[diff.name].validateMode === 'onBlur') {
-        const errorMessage = fields[diff.name].validate(diff.value) || ''
+        const errorMessage = (diff.value === '' && fields[diff.name].requiredMessage)
+          || (diff.value !== '' && fields[diff.name].validate(diff.value))
+          || ''
 
         return ({
           ...fields,
           [diff.name]: {
             ...fields[diff.name],
-            isValid: !Boolean(diff.value) ? null : !Boolean(errorMessage),
-            errorMessage: !Boolean(diff.value) ? '' : errorMessage,
+            isValid: !Boolean(errorMessage),
+            errorMessage: errorMessage,
           },
         })
       }
@@ -200,9 +209,9 @@ export const createForm = ({ submitFx }) => {
 
 /**
  * Тэст-кейсы:
- * 1. Форма инициализируестя с невалидным значением в поле (синхронная и асинхронная валидация)
+ * 1. + Форма инициализируестя с невалидным значением в поле (синхронная и асинхронная валидация)
  * 2. Запись в локалстораж
- * 3. Добавить селект
+ * 3. Ошибка в селекте: при инициализации срабатывают холостые Change Сheck
  * 4. submit strategy
  * 5. валидация по onChange
  * 6. событие аналитики

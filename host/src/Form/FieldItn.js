@@ -8,7 +8,11 @@ const FieldItn = () => {
     initialValue: '',
     name: 'itn',
     parse: (value) => /^\d+$/.test(value),
-    validate: (value) => value.length < 10 && 'Должно быть больше 10-х символов'
+    validate: (value) => {
+      if (value.length < 10) return 'Должно быть больше 10-ти цифр'
+      if (value.length !== 10 && value.length !== 12) return 'Должно быть либо 10 цифр либо 12'
+      return ''
+    }
   })
   const { field, onChange, onBlur } = useField('itn');
 
@@ -28,7 +32,7 @@ const FieldItn = () => {
       onChange={handleChange}
       errorMessage={field?.errorMessage}
       addonAfter={
-        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'close'} />) : ''
+        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'exclamation'} />) : ''
       }
     />
   )

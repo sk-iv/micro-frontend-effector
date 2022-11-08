@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, FieldText, Icon } from '@npm-registry/eapteka-ui';
+import { FieldText, Icon } from '@npm-registry/eapteka-ui';
 import { useGate } from 'effector-react'
 import {useField, FieldGate} from '../model3'
 
@@ -8,7 +8,6 @@ const FieldName = () => {
     initialValue: 'в',
     name: 'name',
     validate: (value) => value.length < 2 && 'Должно быть больше 2-х символов',
-    required: true,
     requiredMessage: 'Имя обязательно для заполнения',
   })
   const { field, onChange, onBlur } = useField('name');
@@ -23,7 +22,7 @@ const FieldName = () => {
   return (
     <FieldText
       addonAfter={
-        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'close'} />) : ''
+        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'exclamation'} />) : ''
       }
       className="mt-1"
       errorMessage={field?.errorMessage}

@@ -34,7 +34,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@npm-registry/eapteka-ui": "^1.4.1",
+    "@npm-registry/eapteka-ui": "^1.5.0",
     "effector": "^22.3.0",
     "effector-inspector": "^0.9.1",
     "effector-localstorage": "^0.5.3",
