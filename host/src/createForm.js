@@ -1,4 +1,4 @@
-import { createStore, createEvent, sample } from 'effector'
+import { createStore, createEvent, sample, split } from 'effector'
 
 const fieldProps = {
   initialValue: '',
@@ -8,7 +8,7 @@ const fieldProps = {
   isMultiselectable: false,
   value: '',
   checked: [],
-  /** Нужен для событий аналитики, если надо отправить событие при первом касании */
+  /** поле получило событие фокуса и разфокуса */
   isTouched: false,
   label: '',
   name: '',
@@ -41,13 +41,7 @@ export const createForm = ({ submitFx }) => {
   const $fields = createStore({});
 
   const reset = createEvent();
-
   const submit = createEvent();
-  // const inited = createEvent();
-  // const changed = createEvent();
-  // const inputed = createEvent();
-  // const touched = createEvent();
-
   const addField = createEvent();
   const changeField = createEvent();
   const blurField = createEvent();
@@ -74,7 +68,6 @@ export const createForm = ({ submitFx }) => {
         [diff.name]: {
           ...fields[diff.name],
           checked: [diff.id],
-          isTouched: true,
           value: fields[diff.name]?.parse?.(diff.value)
             || !Boolean(fields[diff.name]?.parse)
             || diff.value === ''
@@ -84,16 +77,18 @@ export const createForm = ({ submitFx }) => {
       })
     })
     .on(blurField, (fields, diff) => {
-      if (fields[diff.name].validateMode === 'onBlur') {
-        const errorMessage = (diff.value === '' && fields[diff.name].requiredMessage)
-          || (diff.value !== '' && fields[diff.name].validate(diff.value))
+      if (fields[diff.name]?.validateMode === 'onBlur') {
+        const errorMessage = (!Boolean(diff.value) && fields[diff.name].requiredMessage)
+          || (Boolean(diff.value) && fields[diff.name].validate(diff.value))
           || ''
-
+        let isValid = !Boolean(errorMessage)
+        if (!Boolean(diff.value) && !fields[diff.name].requiredMessage) isValid = null
         return ({
           ...fields,
           [diff.name]: {
             ...fields[diff.name],
-            isValid: !Boolean(errorMessage),
+            isTouched: true,
+            isValid,
             errorMessage: errorMessage,
           },
         })
@@ -101,8 +96,9 @@ export const createForm = ({ submitFx }) => {
     })
     .on(validateFields, (fields) => {
       for (const field of Object.values(fields)) {
-        console.log('field', field);
-        const errorMessage = field.validate(field.value) || ''
+        const errorMessage = field.validate(field.value) 
+          || (!Boolean(field.value) && field.requiredMessage) || ''
+
         return ({
           ...fields,
           [field.name]: { ...fields[field.name], isValid: !errorMessage, errorMessage },
@@ -110,98 +106,30 @@ export const createForm = ({ submitFx }) => {
       }
     })
 
-  // const $isTouched = createStore({})
-  //   .on(touched, (isTouched, name) => ({
-  //     ...isTouched,
-  //     [name]: true,
-  //   }))
-  //   .on(changed, (isTouched, [name]) => ({
-  //     ...isTouched,
-  //     [name]: false,
-  //   }))
-  //   .on(inputed, (isTouched, [name]) => ({
-  //     ...isTouched,
-  //     [name]: false,
-  //   }))
-  //   .reset(reset);
-
   const $isValid = $fields.map((fields) => {
-    return Object.values(fields).every((field) => {
-      return field.isValid || field.isValid === null
-    })
+    const a = Object.values(fields).every((field) => {
+      return (field.isValid || field.isValid === null) 
+        && !(!Boolean(field.value) && Boolean(field.requiredMessage))
+    }) ? 'valid' : 'invalid'
+    return a
   });
 
-  // const fieldEntries = Object.entries(
-  //   initialValues
-  // ).map(([name, initialValue]) => {
-  //   const fieldReset = inputed.prepend(
-  //     () => [name, initialValue]
-  //   );
-
-  //   const fieldInputed = inputed.prepend((value) => [
-  //     name,
-  //     value,
-  //   ]);
-
-    // const fieldChanged = changed.prepend((value) => [
-    //   name,
-    //   value,
-    // ]);
-
-  //   const fieldTouched = touched.prepend(() => name);
-
-  //   const $isFieldTouched = $isTouched.map<boolean | null>(
-  //     (isTouched) => isTouched[name] || null
-  //   );
-
-  //   const $error = $errors.map(
-  //     (errors) => errors[name] || null
-  //   );
-
-  //   const $value = $values.map((values) => values[name]);
-
-  //   const field = {
-  //     initialValue,
-  //     $value,
-  //     $error,
-  //     $isTouched: $isFieldTouched,
-  //     reset: fieldReset,
-  //     inputed: fieldInputed,
-  //     changed: fieldChanged,
-  //     touched: fieldTouched,
-  //   };
-
-  //   return [name, field];
-  // });
-
-  // const fields = Object.fromEntries(
-  //   fieldEntries
-  // );
-
-  // sample({
-  //   clock: $values,
-  //   target: validateFx,
-  // });
-
-  // sample({
-  //   clock: [inited, reset],
-  //   source: $fields,
-  //   target: validateFields,
-  // });
-
-  sample({
+  split({
     clock: submit,
     source: $fields,
-    filter: $isValid,
-    target: submitFx,
-  });
+    match: $isValid,
+    cases: {
+      valid: submitFx,
+      invalid: validateFields
+    }
+  })
 
   return {
     addField,
     blurField,
     changeField,
-    $isValid,
     $fields,
+    $isValid,
     reset,
     submit,
   };
@@ -210,9 +138,9 @@ export const createForm = ({ submitFx }) => {
 /**
  * Тэст-кейсы:
  * 1. + Форма инициализируестя с невалидным значением в поле (синхронная и асинхронная валидация)
- * 2. Запись в локалстораж
- * 3. Ошибка в селекте: при инициализации срабатывают холостые Change Сheck
- * 4. submit strategy
+ * 2. submit strategy
+ * 3. Запись в локалстораж
+ * 4. Ошибка в селекте: при инициализации срабатывают холостые Change Сheck
  * 5. валидация по onChange
- * 6. событие аналитики
+ * 6. событие аналитики, реестр триггеров
  */

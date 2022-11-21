@@ -5,9 +5,9 @@ import {useField, FieldGate} from '../model3'
 
 const FieldName = () => {
   useGate(FieldGate, {
-    initialValue: 'в',
+    // initialValue: 'в',
     name: 'name',
-    validate: (value) => value.length < 2 && 'Должно быть больше 2-х символов',
+    validate: (value) => value?.length < 2 && 'Должно быть больше 2-х символов',
     requiredMessage: 'Имя обязательно для заполнения',
   })
   const { field, onChange, onBlur } = useField('name');
@@ -17,20 +17,31 @@ const FieldName = () => {
   }
   const handleBlur = (e) => {
     onBlur(e.target.value)
+    if(!field.isTouched) {
+      console.log('GGGGGGGGGGGGGGGGGGGGGGGGGG');
+    }
   }
 
   return (
     <FieldText
       addonAfter={
-        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'exclamation'} />) : ''
+        field.isValid !== null 
+          ? (
+            <Icon
+              style={{color: field.isValid ? 'green' : 'red'}}
+              name={field.isValid ? "checkRound" : 'exclamation'}
+            />
+          ) 
+          : ''
       }
       className="mt-1"
       errorMessage={field?.errorMessage}
       label="Текстовое поле"
       onBlur={handleBlur}
       onChange={handleChange}
-      required={field?.required}
+      required={true}
       value={field?.value}
+      hasClear
     />
   );
 }

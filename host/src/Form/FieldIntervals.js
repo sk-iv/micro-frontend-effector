@@ -2,45 +2,39 @@ import React, {useCallback} from 'react';
 import { Select } from '@npm-registry/eapteka-ui';
 import { useGate } from 'effector-react'
 import {useField, FieldGate} from '../model3'
-const initialChecked = ['two']
+import {emitTimeIntervals} from '../emitTimeIntervals'
+
+const options = emitTimeIntervals()
+const initialChecked = [options[0].id]
+
 const FieldIntervals = () => {
   useGate(FieldGate, {
     name: 'intervals',
   })
-  const { field, onChange, onBlur } = useField('intervals');
+  const { field, onChange, onCheck, onBlur } = useField('intervals');
 
   const handleChange = useCallback((e) => {
-    console.log('e.target.value', e.target.value);
-    //if(e.target.value) onChange(e.target.value)
+    onChange(e.target.value)
   },[])
   const handleBlur = (e) => {
     onBlur(e.target.value)
   }
-  const handleCheck = (e) => {
-    console.log('FieldIntervals handleCheck', e);
-    // onChange(e.target)
-  }
-console.log('field?.value1', field?.value);
+  const handleCheck = useCallback((key, value, event) => {
+    onCheck(key)
+    onChange(value?.label)
+  },[])
+
   return (
     <Select
-      //checkedOptions={initialChecked}
+      checkedOptions={initialChecked}
       value={field?.value}
       className="mt-1"
       label="Интервалы доставки"
       onBlur={handleBlur}
       onChange={handleChange}
       onCheck={handleCheck}
-      options={[
-        { option: 'Один', id: '1' },
-        { option: 'Длинный текст в пункте', id: 'two' },
-        { option: 'Три', id: 'tree', disabled: true },
-        { option: 'Четыре', id: '4' },
-        { option: 'Пять', id: '5' },
-        { option: 'Шесть', id: '6' },
-        { option: 'Семь', id: '7' },
-        { option: 'Восемь', id: '8' },
-        { option: 'Девять', id: '9' }
-      ]}
+      options={options}
+      disableFilter
     />
   )
 }

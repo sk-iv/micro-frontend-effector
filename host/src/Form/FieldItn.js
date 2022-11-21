@@ -32,7 +32,14 @@ const FieldItn = () => {
       onChange={handleChange}
       errorMessage={field?.errorMessage}
       addonAfter={
-        field.isValid !== null ? (<Icon name={field.isValid ? "checkRound" : 'exclamation'} />) : ''
+        field.isValid !== null 
+          ? (
+            <Icon
+              style={{color: field.isValid ? 'green' : 'red'}}
+              name={field.isValid ? "checkRound" : 'exclamation'}
+            />
+          ) 
+          : ''
       }
     />
   )

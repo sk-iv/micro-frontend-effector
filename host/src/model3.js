@@ -1,5 +1,5 @@
 import { sample, createEffect } from 'effector'
-import { createGate, useStoreMap, useUnit } from "effector-react"
+import { createGate, useStoreMap, useUnit, useStore } from "effector-react"
 import { status } from 'patronum'
 import { createForm } from './createForm'
 import { submitForm } from './Form/api/submitForm'
@@ -24,7 +24,7 @@ export const useField = (name) => {
       name,
       id,
     })),
-    onBlur:  form.blurField.prepend((value) => ({
+    onBlur: form.blurField.prepend((value) => ({
       name,
       value,
     })),
@@ -34,7 +34,8 @@ export const useField = (name) => {
 export const useSubmit = () => {
   return {
     onSubmit: form.submit.prepend((value) => value),
-    requestStatus: useUnit($requestStatus)
+    requestStatus: useUnit($requestStatus),
+    validationStatus: useStore(form.$isValid)
   }
 }
 

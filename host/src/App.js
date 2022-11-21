@@ -2,6 +2,7 @@ import React from "react";
 import {
   Routes,
   Route,
+  Link
 } from "react-router-dom";
 import Home from "./pages/Home"
 import Form from "./pages/Form"
@@ -15,6 +16,9 @@ configureRootTheme({ theme: externalTheme });
 export const App = () => {
   return (
   <div className="container">
+    <Link to="/">Home</Link>
+    {' | '}
+    <Link to="/form">Form</Link>
     <Routes>
       <Route exact path="/" element={<Home />} />
       <Route path="/form" element={<Form />} />
