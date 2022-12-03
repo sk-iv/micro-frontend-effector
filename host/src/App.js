@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home"
 import Form from "./pages/Form"
+import Other from "./pages/Other"
 import { configureRootTheme, externalTheme } from '@npm-registry/eapteka-ui';
 import './index.css'
 
@@ -22,6 +23,7 @@ export const App = () => {
     <Routes>
       <Route exact path="/" element={<Home />} />
       <Route path="/form" element={<Form />} />
+      <Route path="/other" element={<Other />} />
       <Route path="*" element={<div>Не найдено</div>} />
     </Routes>
   </div>

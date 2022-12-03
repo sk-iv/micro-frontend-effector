@@ -1,17 +1,18 @@
 import React, {useCallback} from 'react';
 import { Select } from '@npm-registry/eapteka-ui';
 import { useGate } from 'effector-react'
-import {useField, FieldGate} from '../model3'
+import { useField } from '../createForm'
 import {emitTimeIntervals} from '../emitTimeIntervals'
+import { form } from '../model3'
 
 const options = emitTimeIntervals()
 const initialChecked = [options[0].id]
 
 const FieldIntervals = () => {
-  useGate(FieldGate, {
+  useGate(form.FieldGate, {
     name: 'intervals',
   })
-  const { field, onChange, onCheck, onBlur } = useField('intervals');
+  const { field, onChange, onCheck, onBlur } = useField('intervals', form);
 
   const handleChange = useCallback((e) => {
     onChange(e.target.value)

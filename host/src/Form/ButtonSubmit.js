@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from '@npm-registry/eapteka-ui'
-import { useSubmit } from '../model3'
+import { useSubmit } from '../createForm'
+import { form, $requestStatus } from '../model3'
 
 const ButtonSubmit = () => {
-  const { onSubmit, requestStatus, validationStatus } = useSubmit();
+  const { onSubmit, requestStatus, validationStatus, isTouched } = useSubmit(form, $requestStatus);
   const handleSubmit = (e) => {
     onSubmit(e.target.value)
   }
@@ -17,7 +18,7 @@ console.log('validationStatus', validationStatus);
   >
     Отправить
   </Button>
-  {validationStatus === 'invalid' && 'Есть ошибки'}
+  {validationStatus === 'invalid' && isTouched && 'Есть ошибки'}
   </>)
 }
 export default ButtonSubmit

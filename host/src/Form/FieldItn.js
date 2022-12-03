@@ -1,10 +1,11 @@
 import React from 'react';
 import { FieldText, Icon } from '@npm-registry/eapteka-ui';
 import { useGate } from 'effector-react'
-import {useField, FieldGate} from '../model3'
+import { useField } from '../createForm'
+import { form } from '../model3'
 
 const FieldItn = () => {
-  useGate(FieldGate, {
+  useGate(form.FieldGate, {
     initialValue: '',
     name: 'itn',
     parse: (value) => /^\d+$/.test(value),
@@ -14,7 +15,7 @@ const FieldItn = () => {
       return ''
     }
   })
-  const { field, onChange, onBlur } = useField('itn');
+  const { field, onChange, onBlur } = useField('itn', form);
 
   const handleChange = (e) => {
     onChange(e.target.value)

@@ -1,14 +1,15 @@
 import React from 'react';
 import { List, ListItem, Icon, RadioButton, Typography } from '@npm-registry/eapteka-ui';
 import { useGate } from 'effector-react'
-import { useField, FieldGate } from '../model3'
+import { useField } from '../createForm'
+import { form } from '../model3'
 
 const FieldsetPayment = () => {
-  useGate(FieldGate, {
+  useGate(form.FieldGate, {
     initialChecked: ['one'],
     name: 'payment',
   })
-  const { field, onCheck } = useField('payment');
+  const { field, onCheck } = useField('payment', form);
 
   const handleChange = (e) => {
     onCheck(e.target.value)

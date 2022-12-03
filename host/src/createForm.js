@@ -1,4 +1,5 @@
 import { createStore, createEvent, sample, split } from 'effector'
+import { createGate, useStoreMap, useUnit, useStore } from "effector-react"
 
 const fieldProps = {
   initialValue: '',
@@ -38,13 +39,16 @@ const fieldProps = {
 
 export const createForm = ({ submitFx }) => {
   //переименовать в controls
+  const FieldGate = createGate()
   const $fields = createStore({});
+  const $isTouchedSubmit = createStore(false);
 
   const reset = createEvent();
   const submit = createEvent();
   const addField = createEvent();
   const changeField = createEvent();
   const blurField = createEvent();
+  const focusField = createEvent();
   const validateFields = createEvent();
 
   $fields
@@ -94,6 +98,16 @@ export const createForm = ({ submitFx }) => {
         })
       }
     })
+    .on(focusField, (fields, diff) => {
+      return ({
+        ...fields,
+        [diff.name]: {
+          ...fields[diff.name],
+          isValid: null,
+          errorMessage: '',
+        },
+      });
+    })
     .on(validateFields, (fields) => {
       for (const field of Object.values(fields)) {
         const errorMessage = field.validate(field.value) 
@@ -124,23 +138,70 @@ export const createForm = ({ submitFx }) => {
     }
   })
 
+  sample({
+    clock: submit,
+    fn: () => true,
+    target: $isTouchedSubmit
+  })
+
+  sample({
+    clock: FieldGate.open,
+    target: addField
+  })
+
   return {
     addField,
     blurField,
+    focusField,
     changeField,
     $fields,
     $isValid,
+    $isTouchedSubmit,
     reset,
     submit,
+    FieldGate,
   };
 };
+
+export const useField = (name, form) => {
+  return {
+    field: useStoreMap({
+      store: form.$fields,
+      fn: (items) => items[name],
+      keys: [name],
+    }) || {},
+    onChange: form.changeField.prepend((value) => ({
+      name,
+      value,
+    })),
+    onCheck: form.changeField.prepend((id) => ({
+      name,
+      id,
+    })),
+    onBlur: form.blurField.prepend((value) => ({
+      name,
+      value,
+    })),
+    onFocus: form.focusField.prepend((value) => ({
+      name,
+      value,
+    })),
+  }
+}
+
+export const useSubmit = (form, $requestStatus) => {
+  return {
+    onSubmit: form.submit.prepend((value) => value),
+    requestStatus: useUnit($requestStatus),
+    validationStatus: useStore(form.$isValid),
+    isTouched: useStore(form.$isTouchedSubmit),
+  }
+}
 
 /**
  * Тэст-кейсы:
  * 1. + Форма инициализируестя с невалидным значением в поле (синхронная и асинхронная валидация)
  * 2. submit strategy
  * 3. Запись в локалстораж
- * 4. Ошибка в селекте: при инициализации срабатывают холостые Change Сheck
- * 5. валидация по onChange
- * 6. событие аналитики, реестр триггеров
+ * 4. событие аналитики, реестр триггеров
  */
