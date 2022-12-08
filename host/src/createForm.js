@@ -13,14 +13,11 @@ const fieldProps = {
   isTouched: false,
   label: '',
   name: '',
-  // trigger: 'onInit',
-  // options: [],
   type: 'text',
   errorMessage: '',
   /**
    * Если `true`, поле обязательно к заполнению
    */
-  // required: false,
   requiredMessage: '',
   /**
    * Функция колбэк для валидации значения
@@ -38,8 +35,8 @@ const fieldProps = {
 }
 
 export const createForm = ({ submitFx }) => {
-  //переименовать в controls
   const FieldGate = createGate()
+
   const $fields = createStore({});
   const $isTouchedSubmit = createStore(false);
 
@@ -71,7 +68,7 @@ export const createForm = ({ submitFx }) => {
         ...fields,
         [diff.name]: {
           ...fields[diff.name],
-          checked: [diff.id],
+          ...(diff.id && {checked: [diff.id]}),
           value: fields[diff.name]?.parse?.(diff.value)
             || !Boolean(fields[diff.name]?.parse)
             || diff.value === ''
@@ -128,22 +125,23 @@ export const createForm = ({ submitFx }) => {
     return a
   });
 
-  split({
-    clock: submit,
-    source: $fields,
-    match: $isValid,
-    cases: {
-      valid: submitFx,
-      invalid: validateFields
-    }
-  })
-
+  // связи: один ко многим | один к одному
   sample({
     clock: submit,
     fn: () => true,
     target: $isTouchedSubmit
   })
-
+  // связь: многие ко многим
+  split({
+    clock: submit,            // Если срабатывает событие или обновляется стор
+    source: $fields,          // Взять значения из стора
+    match: $isValid,          // Стор или функция, возвр-я ключи 'valid' | 'invalid'  
+    cases: {                  // сопоставление ключ-юнит
+      valid: submitFx,
+      invalid: validateFields
+    }
+  })
+  
   sample({
     clock: FieldGate.open,
     target: addField
@@ -199,6 +197,7 @@ export const useSubmit = (form, $requestStatus) => {
 }
 
 /**
+ * 
  * Тэст-кейсы:
  * 1. + Форма инициализируестя с невалидным значением в поле (синхронная и асинхронная валидация)
  * 2. submit strategy

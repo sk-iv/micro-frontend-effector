@@ -45,8 +45,8 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "host",
       remotes: {
-        App1: `App1@http://localhost:4000/moduleEntry.js`,
-        App2: `App2@http://localhost:4010/moduleEntry.js`,
+        App1: `App1@http://localhost:4020/moduleEntry.js`,
+        App2: `App2@http://localhost:4030/moduleEntry.js`,
         host: "host@http://localhost:3000/host.js"
       },
       exposes: {

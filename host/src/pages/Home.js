@@ -21,11 +21,11 @@ const Home = () => {
     </RemoteWrapper>
     <br/>
     <span>
-      <a href="http://localhost:4000">Link to Remote App1</a>
+      <a href="http://localhost:4020">Link to Remote App1</a>
     </span>
     {' | '}
     <span>
-      <a href="http://localhost:4010">Link to Remote App2</a>
+      <a href="http://localhost:4030">Link to Remote App2</a>
     </span>
     </>
   )
